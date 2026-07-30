@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Melina Valdata — Portfolio</title>
+  <style>
+    @font-face {
+      font-family: 'Favorit';
+      src: url('fonts/ABCFavorit-Regular-Trial.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'ABC Connect Hex';
+      src: url('fonts/ABCConnect-Hex-Trial.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    :root {
+      --bg: #ffffff;
+      --fg: #111111;
+      --muted: #111111;
+      --line: rgba(17,17,17,0.1);
+      --meta-w: clamp(220px, 32vw, 400px);
+      --gap: 0px;
+      --slider-h: clamp(500px, 72vh, 840px);
+      --nav-h: 50px;
+      --font: 'Favorit', Helvetica, Arial, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font);
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    .topbar {
+      position: sticky; top: 0; z-index: 50; height: var(--nav-h);
+      background: var(--bg);
+      display: grid; grid-template-columns: var(--meta-w) 1fr auto;
+      align-items: center; padding: 0 0 0 24px;
+    }
+    .brand-group { display: flex; flex-direction: column; font-size: 13px; letter-spacing: 0.01em; line-height: 1.35; padding: 4px 24px 4px 0; width: 100%; }
+    .brand-line2 { display: flex; justify-content: flex-end; }
+    .brand { font-size: 13px; font-weight: 400; letter-spacing: 0.01em; transition: color 0.25s ease; }
+    .brand:hover { color: rgba(17,17,17,0.35); }
+    .bracket { color: var(--fg); }
+    .tab-active { color: rgb(91,90,90); }
+    .tab-hidden { color: var(--bg); }
+    .tab-hidden:hover { color: var(--fg); }
+    .nav-toggle { display: inline-flex; align-items: baseline; font-size: 13px; gap: 6px; }
+    .nav-toggle a { font-size: 13px; letter-spacing: 0.03em; }
+    .nav-word { color: var(--bg); }
+    .nav-word:hover { color: var(--fg); }
+    .topbar-nav { display: flex; gap: 24px; justify-content: center; align-items: baseline; }
+    .topbar-right { width: var(--meta-w); display: flex; justify-content: flex-end; padding-right: 24px; }
+    .lang-toggle {
+      font-size: 12px; font-weight: 400; letter-spacing: 0.03em;
+      color: rgba(17,17,17,0.4); background: none; border: none; cursor: pointer;
+      font-family: var(--font); padding: 0; transition: opacity 0.2s;
+    }
+    .lang-toggle:hover { opacity: 0.4; }
+    .project { display: grid; grid-template-columns: 1fr 3fr; scroll-margin-top: var(--nav-h); margin-bottom: 48px; }
+    .meta {
+      padding: 28px 24px; border-right: 0.5px solid var(--line);
+      display: flex; flex-direction: column; gap: 6px;
+      position: sticky; top: var(--nav-h); align-self: start; height: calc(var(--slider-h));
+    }
+    .idx { font-size: 15px; font-weight: 400; color: var(--fg); letter-spacing: 0.1em; font-family: 'ABC Connect Hex', var(--font); }
+    .meta .title-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+    .meta .proj-title { font-size: 16px; font-weight: 0; letter-spacing: 0.01em; line-height: 1.1; color: var(--fg); font-family: 'ABC Connect Hex', var(--font); overflow: hidden; white-space: nowrap; padding-right: 18px; }
+    .meta .proj-title span { display: inline-block; transition: transform 0.6s ease; }
+    .meta .proj-title:hover span { transform: translateX(14px); }
+    .meta .category-row { display: flex; align-items: baseline; gap: 8px; margin-top: 0; }
+    .meta .category { font-size: 13px; font-weight: 400; color: rgb(91, 90, 90); line-height: 1.1; }
+    .meta .desc { font-size: 15px; font-weight: 400; line-height: 1.3; color: var(--fg); margin-top: 8px; display: none; }
+    .meta .desc.open { display: block; }
+    .meta .desc-toggle {
+      font-size: 15px; font-weight: 400; color: rgb(91,90,90);
+      background: none; border: none; cursor: pointer; padding: 0;
+      font-family: 'ABC Connect Hex', var(--font); text-align: left;
+      line-height: 1; flex-shrink: 0;
+    }
+    .meta .desc-toggle:hover { color: var(--fg); text-decoration: underline; }
+    .meta .webtool { font-size: 14px; color: var(--fg); text-decoration: none; display: inline-block; }
+    .meta .webtool:hover { opacity: 0.45; }
+    .meta .year { font-size: 15px; color: var(--fg); letter-spacing: 0.08em; font-family: 'ABC Connect Hex', var(--font); }
+    .meta .meta-bottom { margin-top: auto; display: flex; flex-direction: column; gap: 6px; }
+    .slider { position: relative; overflow: hidden; height: var(--slider-h); background: #fff; cursor: none; user-select: none; touch-action: pan-y; transition: height 0.4s ease; }
+    .track { display: flex; height: 100%; transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1); will-change: transform; }
+    .slide { min-width: 100%; height: 100%; flex: 0 0 100%; background: #fff; display: flex; align-items: flex-start; justify-content: flex-start; }
+    .slide img, .slide video { display: block; width: 100%; height: 100%; object-fit: contain; object-position: left top; pointer-events: none; }
+    .slide.small img { height: auto; max-height: 40%; width: auto; max-width: 40%; }
+    .slide.double { gap: 2px; }
+    .slide.row { display: flex; flex-direction: row; align-items: flex-start; gap: 2px; overflow: hidden; }
+    .slide.row img, .slide.row video { height: 100%; width: auto; max-width: none; max-height: 100%; object-fit: contain; object-position: left top; flex: 0 0 auto; }
+    .slide.double img, .slide.double video { height: 100%; width: 50%; max-width: 50%; object-fit: contain; object-position: center; flex: 0 0 auto; }
+    .slide.text { padding: 48px 56px; flex-direction: column; justify-content: flex-start; align-items: flex-start; overflow-y: auto; }
+    .slide.text .slide-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 28px; opacity: 0.45; }
+    .slide.text p { font-size: 15px; line-height: 1.1; max-width: 640px; }
+    .slide.text .slide-text-images { display: flex; gap: 2px; margin-top: 32px; width: 100%; flex: 1; min-height: 0; }
+    .slide.text .slide-text-images img, .slide.text .slide-text-images video { height: 100%; max-height: 260px; width: auto; object-fit: contain; object-position: left top; }
+    .slide.text.images-only { padding: 48px 56px; }
+    .slide.text.images-only .slide-text-images { margin-top: 0; gap: 0px; }
+    .slide.text.images-only .slide-text-images img, .slide.text.images-only .slide-text-images video { max-height: 85%; }
+    .slider-cursor {
+      position: absolute;
+      pointer-events: none;
+      font-size: 18px;
+      line-height: 1.1;
+      color: var(--fg);
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      display: none;
+      font-family: var(--font);
+    }
+    .slide-counter { position: absolute; bottom: 16px; right: 18px; font-size: 15px; font-weight: 400; color: var(--fg); letter-spacing: 0.08em; pointer-events: none; }
+    .audio-toggle {
+      position: absolute; bottom: 16px; left: 18px;
+      font-size: 12px; font-weight: 400; letter-spacing: 0.08em;
+      color: #ffffff; background: none; border: none; cursor: pointer;
+      font-family: var(--font); padding: 0; transition: opacity 0.2s; z-index: 10; display: none;
+      mix-blend-mode: difference;
+    }
+    .audio-toggle:hover { opacity: 0.4; }
+    .slide-counter { position: absolute; bottom: 16px; right: 18px; font-size: 15px; font-weight: 400; color: #ffffff; letter-spacing: 0.08em; pointer-events: none; mix-blend-mode: difference; }
+    .slider-cursor { position: absolute; pointer-events: none; font-size: 18px; line-height: 1.1; color: #ffffff; transform: translate(-50%, -50%); z-index: 10; display: none; font-family: var(--font); mix-blend-mode: difference; }
+    footer { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; }
+    footer .f-left, footer .f-right, footer .f-center { font-size: 12px; letter-spacing: 0.05em; color: var(--muted); }
+    footer .f-center:hover { opacity: 0.5; }
+    .progress { position: fixed; bottom: 0; left: 0; height: 1px; background: var(--fg); z-index: 99; width: 0%; transition: width 0.1s linear; }
+    /* Combined Index / About page */
+    #ia-overlay { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 200; overflow-y: auto; padding-top: var(--nav-h); }
+    #ia-overlay.open { display: block; }
+    #ia-overlay .topbar { position: fixed; top: 0; left: 0; right: 0; z-index: 201; }
+    #ia-overlay .topbar-right { display: flex; flex-direction: column; align-items: flex-end; justify-content: center; gap: 3px; }
+    #ia-overlay .nav-word { color: rgb(91,90,90); }
+    #ia-overlay .nav-word:hover { color: var(--fg); }
+    .ia-cv-link { font-size: 12px; letter-spacing: 0.03em; color: rgba(17,17,17,0.4); transition: opacity 0.2s; }
+    .ia-cv-link:hover { color: var(--fg); }
+    .ia-page { padding: 32px 24px 120px; }
+    .ia-grid {
+      display: grid;
+      grid-template-columns: minmax(580px, 1.15fr) minmax(260px, 1fr) minmax(160px, 0.55fr);
+      column-gap: 32px; align-items: start;
+    }
+    .ia-list { display: flex; flex-direction: column; }
+    .ia-row {
+      display: grid; grid-template-columns: 40px 200px auto 1fr auto; gap: 24px;
+      align-items: baseline; text-decoration: none; color: var(--fg);
+      line-height: 1.45; transition: opacity 0.2s;
+    }
+    .ia-list:hover .ia-row { opacity: 0.35; }
+    .ia-list .ia-row:hover { opacity: 1; }
+    .ia-row .ia-num { font-size: 15px; letter-spacing: 0.06em; font-family: 'ABC Connect Hex', var(--font); }
+    .ia-row .ia-title { font-size: 15px; letter-spacing: 0.01em; font-family: 'ABC Connect Hex', var(--font); overflow: hidden; white-space: nowrap; display: inline-block; padding-right: 18px; }
+    .ia-row .ia-title span { display: inline-block; transition: transform 0.6s ease; }
+    .ia-row:hover .ia-title span { transform: translateX(14px); }
+    .ia-row .ia-cat { font-size: 13px; letter-spacing: 0.02em; color: rgb(91, 90, 90); white-space: nowrap; text-align: left; grid-column: 3; }
+    .ia-row .ia-year { font-size: 15px; letter-spacing: 0.04em; white-space: nowrap; font-family: 'ABC Connect Hex', var(--font); grid-column: 5; }
+    .ia-bio-wrap { max-width: 560px; }
+    .ia-bio { font-size: 15px; line-height: 1.45; color: var(--fg); max-width: 560px; }
+    .ia-education { display: flex; flex-direction: column; gap: 12px; margin-top: 28px; max-width: 560px; }
+    .ia-edu-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(17,17,17,0.4); }
+    .ia-edu-item { display: flex; flex-direction: column; font-size: 14px; line-height: 1.4; }
+    .ia-edu-title { color: var(--fg); }
+    .ia-edu-meta { color: rgba(17,17,17,0.5); font-size: 13px; }
+    .ia-contact { display: flex; flex-direction: column; gap: 20px; }
+    .ia-loc { font-size: 15px; line-height: 1.45; }
+    .ia-contacts { font-size: 15px; line-height: 1.45; }
+    .ia-contacts a:hover { opacity: 0.5; }
+    .ia-visual {
+      position: relative; width: 100%; display: flex; justify-content: flex-start;
+      align-items: flex-end; margin-top: clamp(60px, 12vh, 150px); min-height: 460px;
+      pointer-events: none;
+    }
+    .ia-graphic { max-width: 420px; max-height: 460px; width: auto; height: auto; object-fit: contain; transition: opacity 0.18s; }
+    .ia-visual.hovering .ia-graphic { opacity: 0; }
+    .ia-cover-hover { position: absolute; bottom: 0; left: 0; opacity: 0; transition: opacity 0.18s; }
+    .ia-cover-hover.visible { opacity: 1; }
+    .ia-cover-hover img, .ia-cover-hover video { max-width: 420px; max-height: 460px; width: auto; height: auto; object-fit: contain; display: block; }
+    @media (max-width: 1150px) {
+      .ia-grid { grid-template-columns: 1fr; row-gap: 32px; }
+      .ia-bio, .ia-bio-wrap, .ia-contact { max-width: none; }
+      :root { --slider-h: clamp(420px, 62vh, 760px); }
+      /* About content (bio + education + contact) reads before the Index list. */
+      .ia-bio-wrap { order: 1; }
+      .ia-contact { order: 2; }
+      .ia-list { order: 3; }
+    }
+    @media (max-width: 860px) { :root { --meta-w: 140px; } }
+
+    /* Tablet / large phone: stack meta above the slider, loosen the
+       fixed-width bits (title truncation, side-by-side images) that only
+       make sense when there's a hover affordance and a lot of horizontal
+       room. */
+    @media (max-width: 760px) {
+      :root { --slider-h: clamp(300px, 55vh, 640px); }
+      .project { grid-template-columns: 1fr; margin-bottom: 32px; }
+      /* On mobile the image is centered in the slider, rather than
+         flush left like on desktop. */
+      .slide img, .slide video { object-position: center; }
+      .meta {
+        position: static; height: auto; border-right: none;
+        border-bottom: 0.5px solid var(--line); padding: 20px 20px 24px;
+      }
+      .meta .proj-title { white-space: normal; overflow: visible; padding-right: 0; }
+      .meta .proj-title:hover span { transform: none; }
+      /* Mobile keeps only number, title and category — no description. */
+      .meta .desc-toggle { display: none; }
+      .meta .desc { display: none !important; }
+      .slide.text { padding: 28px 20px; }
+      .slide.text p { max-width: none; }
+      .slide.text .slide-text-images { flex-wrap: wrap; }
+      .slide.text .slide-text-images img, .slide.text .slide-text-images video {
+        max-height: 220px; flex: 1 1 45%;
+      }
+      /* Double-image slides (the 2-up ones) stay side by side on mobile too. */
+      .slide.row { flex-direction: column; overflow-y: auto; gap: 8px; }
+      .slide.row img, .slide.row video {
+        max-width: 100%; width: 100%; height: auto; max-height: 55%;
+      }
+
+      /* Topbar switches to a plain flex row: brand on the left, Index/About
+         truly centered on the viewport (not just centered in the leftover
+         space), language toggle on the right. */
+      .topbar {
+        display: flex; grid-template-columns: none; position: relative;
+        align-items: center; justify-content: space-between;
+        padding: 0 14px; gap: 10px;
+      }
+      .brand-group { flex: 0 1 auto; width: auto; min-width: 0; padding: 4px 0; }
+      /* Drop the "Selected works | Drafts" toggle on mobile — just the
+         brand name, without its dangling bracket. */
+      .brand-line2 { display: none; }
+      .brand-line1 .bracket { display: none; }
+      .topbar-nav {
+        position: absolute; left: 50%; top: 50%;
+        transform: translate(-50%, -50%);
+      }
+      .topbar-right { width: auto; padding-right: 0; flex: 0 0 auto; }
+
+      /* No hover on touch, so Index/About stays visible instead of being
+         revealed only on mouseover. */
+      .nav-word { color: var(--fg); }
+
+      /* Mobile nav shows only "About" — "Index" (both open the same
+         overlay, so nothing is lost by dropping the duplicate label). */
+      #indexabout-btn, #ia-close-btn { display: none; }
+
+      .ia-page { padding: 24px 16px 100px; }
+      .ia-visual { min-height: 280px; margin-top: 32px; }
+      .ia-graphic { max-width: 260px; max-height: 280px; }
+      .ia-cover-hover img, .ia-cover-hover video { max-width: 260px; max-height: 280px; }
+
+      /* Index list is dropped on mobile — keep just the looping cover
+         images and the About content. */
+      .ia-list { display: none; }
+    }
+
+    @media (max-width: 700px) {
+      .ia-row { grid-template-columns: 30px 1fr auto; }
+      .ia-row .ia-year { grid-column: 3; }
+      .ia-row .ia-cat { display: none; }
+    }
+
+    /* Small phones */
+    @media (max-width: 480px) {
+      .brand, .brand-line2 span, .brand-line2 a, .tab-active { font-size: 12px; }
+      .nav-toggle, .nav-toggle a { font-size: 12px; }
+      .idx, .meta .year { font-size: 13px; }
+      .meta .proj-title { font-size: 15px; }
+      .meta .category { font-size: 12px; }
+      .meta .desc { font-size: 12px; }
+      .slide-counter { font-size: 13px; }
+      .ia-row { grid-template-columns: 22px 1fr auto; gap: 12px; }
+      .ia-row .ia-num, .ia-row .ia-year { font-size: 13px; }
+      .ia-row .ia-title { font-size: 14px; }
+      footer { padding: 14px 16px; flex-wrap: wrap; gap: 6px 16px; justify-content: center; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <span class="brand-group">
+    <span class="brand-line1"><a class="brand" href="#" id="home-brand-btn">Melina Valdata</a> <span class="bracket">[</span></span>
+    <span class="brand-line2"><span class="tab-active">Selected works</span> <span class="bracket">|</span> <a href="drafts.html" class="tab-hidden">Drafts</a> <span class="bracket">]</span></span>
+  </span>
+  <nav class="topbar-nav">
+    <span class="nav-toggle">
+      <span class="bracket">[</span><a href="#" id="indexabout-btn" class="nav-word">Index</a><a href="#" id="about-btn-main" class="nav-word">About</a><span class="bracket">]</span>
+    </span>
+  </nav>
+  <div class="topbar-right">
+    <button class="lang-toggle" id="lang-toggle">It/En</button>
+  </div>
+</header>
+
+<div class="progress" id="progress"></div>
+
+<div id="ia-overlay">
+  <header class="topbar">
+    <span class="brand-group">
+      <span class="brand-line1"><a class="brand" href="#" id="ia-home-btn">Melina Valdata</a> <span class="bracket">[</span></span>
+      <span class="brand-line2"><a href="#" id="selected-works-ia" class="tab-hidden">Selected works</a> <span class="bracket">|</span> <a href="drafts.html" class="tab-hidden">Drafts</a> <span class="bracket">]</span></span>
+    </span>
+    <nav class="topbar-nav">
+      <span class="nav-toggle">
+        <span class="bracket">[</span><a href="#" id="ia-close-btn" class="nav-word">Index</a><a href="#" id="about-btn-ia" class="nav-word">About</a><span class="bracket">]</span>
+      </span>
+    </nav>
+    <div class="topbar-right">
+      <button class="lang-toggle" id="lang-toggle-ia">It/En</button>
+    </div>
+  </header>
+  <div class="ia-page">
+    <div class="ia-grid">
+      <div class="ia-list" id="ia-list"></div>
+      <div class="ia-bio-wrap">
+        <div class="ia-bio"
+          data-en="Melina Valdata is a Visual and Communication Designer particularly interested in editorial design, visual identities and interaction design, focused on creating coherent visual systems across physical and digital contexts. She is currently completing a Master's Degree in Digital Communication Environments at the Academy of Art and Design / HGK / in Basel."
+          data-it="Melina Valdata è una Visual and Communication Designer particolarmente interessata al design editoriale, alla costruzione di identità visive e design interattivo. L'obbiettivo è quello di creare sistemi visivi coerenti tra contesti fisici e digitali. Attualmente sta completando un Master in Digital Communication Environments all'Academy of Art and Design / HGK / di Basilea."
+        >Melina Valdata is a Visual and Communication Designer particularly interested in editorial design, visual identities and interaction design, focused on creating coherent visual systems across physical and digital contexts. She is currently completing a Master's Degree in Digital Communication Environments at the Academy of Art and Design / HGK / in Basel.</div>
+        <div class="ia-education">
+          <div class="ia-edu-label" data-en="Education" data-it="Formazione">Education</div>
+          <div class="ia-edu-item">
+            <span class="ia-edu-title" data-en="Bachelor's Degree in Communication Design" data-it="Laurea Triennale in Design della Comunicazione">Bachelor's Degree in Communication Design</span>
+            <span class="ia-edu-meta">Politecnico di Milano, 2024</span>
+          </div>
+          <div class="ia-edu-item">
+            <span class="ia-edu-title" data-en="Master's Degree" data-it="Laurea Magistrale">Master's Degree</span>
+            <span class="ia-edu-meta">Basel Academy of Art and Design, Basel, 2026</span>
+          </div>
+        </div>
+      </div>
+      <div class="ia-contact">
+        <div class="ia-loc">Basel, Switzerland<br>Milan, Italy</div>
+        <a class="ia-cv-link" href="cv.pdf" target="_blank">CV</a>
+        <div class="ia-contacts">
+          <a href="mailto:melinavaldata@gmail.com">melinavaldata@gmail.com</a> /<br>
+          <a href="https://www.linkedin.com/in/melina-valdata-a945a625b/" target="_blank">Linkedin</a>
+        </div>
+      </div>
+    </div>
+    <div class="ia-visual" id="ia-visual">
+      <img class="ia-graphic" id="ia-graphic" src="images/index-graphic.png" alt="" style="display:none">
+      <div class="ia-cover-hover" id="ia-cover-hover"></div>
+    </div>
+  </div>
+</div>
+
+<main id="projects-container"></main>
+
+<footer>
+  <div class="f-left">Melina Valdata</div>
+  <a class="f-center" href="mailto:melinavaldata@gmail.com">melinavaldata@gmail.com</a>
+  <div class="f-right">© 2026</div>
+</footer>
+
+<script>
+  let currentLang = 'en';
+
+  const projects = [
+    {
+      id: '01',
+      title: 'Authorship',
+      year: '2025',
+      category: 'Book design · Print',
+      description: {
+        en: 'A 180-page A3 book structured in five chapters, each exploring a different visual language [found images, graphic shapes, typography, statistics and photography] as a means of constructing and representing authorship.<br><br> The book was entirely designed and printed, from the development of graphic elements to the production process.',
+        it: "Un libro A3 di 180 pagine strutturato in cinque capitoli, ognuno dei quali esplora un diverso linguaggio visivo [immagini trovate, forme grafiche, tipografia, statistiche e fotografia] come strumento per costruire e rappresentare l'autorialità. <br><br>Il libro è stato interamente progettato e stampato, dallo sviluppo degli elementi grafici al processo produttivo."
+      },
+      base: 'images/project-01/',
+      slides: [
+        'project-01-cover.gif',
+        '01.jpg','02.jpg','03.png',
+        '04.png','05.png','06.png','07.png',
+        '08.gif','09.jpg','10.jpg','11.jpg','12.jpg',
+      ]
+    },
+    {
+      id: '02',
+      title: 'InHands',
+      year: '2026',
+      category: 'Interaction design',
+      description: {
+        en: 'How can digital visual communication systems translate and amplify the emotional perception of hand gestures? <br> <br> Starting from a fascination with non-verbal communication as an emotional carrier, InHands develops a digital system that attempts to translate the expressive capacity of gesture into a coherent visual and sonic experience.',
+        it: "Come possono i sistemi di comunicazione visiva digitale tradurre e amplificare la percezione emotiva dei gesti delle mani? Partendo da una fascinazione per la comunicazione non verbale come vettore emotivo, InHands sviluppa un sistema digitale che tenta di tradurre la capacità espressiva del gesto in un'esperienza visiva e sonora coerente."
+      },
+      base: 'images/project-02/',
+      webtool: 'https://melina121100.github.io/inHands/',
+      indexCover: 'images/project-02/project-02-cover.mov',
+      customSlides: [
+        { type: 'single', srcs: ['images/project-02/project-02-cover.mov'] },
+        {
+          type: 'text',
+          label: { en: 'Concept', it: 'Concept' },
+          text: {
+            en: "Gesture is an unstable, emotionally charged, and culturally situated sign. It is contextual — a physical action that carries intensity, shaped by culture, relation and moment. Gesture is emotionally complex and not reducible to a fixed code. Yet digital systems largely treat it as functional input. This tension defines the space in which the project operates. The work draws on Bruno Munari's Dizionario dei gesti — a catalogue of Italian hand gestures and their meanings — as a reference point for the cultural specificity of gestural communication, and on his broader inquiry into visual language as a carrier of meaning beyond words.",
+            it: "Il gesto è un segno instabile, emotivamente carico e culturalmente situato. È contestuale — un'azione fisica che porta intensità, plasmata da cultura, relazione e momento. Il gesto è emotivamente complesso e non riducibile a un codice fisso. Eppure i sistemi digitali lo trattano prevalentemente come input funzionale. Questa tensione definisce lo spazio in cui opera il progetto. Il lavoro si rifà al Dizionario dei gesti di Bruno Munari — un catalogo di gesti italiani e i loro significati — come punto di riferimento per la specificità culturale della comunicazione gestuale, e alla sua più ampia indagine sul linguaggio visivo come vettore di senso oltre le parole."
+          },
+          srcs: ['images/project-02/01.jpg', 'images/project-02/02.jpg']
+        },
+        {
+          type: 'text',
+          label: { en: 'Development', it: 'Sviluppo' },
+          text: {
+            en: "Following an empirical study and real-world observation of gestural use, the project moved through early experiments with TouchDesigner and MediaPipe as libraries for tracking and interpreting hand gestures in digital environments. This led to the development of a web-based tool that condenses the concept into an interactive experience. Three gestures were selected and associated with emotional states — a deliberate simplification: open hand → joy, semi-open hand → sadness, closed fist → fear. The system responds across three dimensions: text (a poem generated according to the gesture shown), sound, and space. The full experience is accessible directly through the web tool, openable from this page.",
+            it: "A partire da uno studio empirico e dall'osservazione sul campo dell'uso gestuale, il progetto ha attraversato prime sperimentazioni con TouchDesigner e MediaPipe come librerie per il tracciamento e l'interpretazione dei gesti delle mani in ambienti digitali. Ciò ha portato allo sviluppo di uno strumento web che condensa il concetto in un'esperienza interattiva. Tre gesti sono stati selezionati e associati a stati emotivi — una semplificazione deliberata: mano aperta → gioia, mano semi-aperta → tristezza, pugno chiuso → paura. Il sistema risponde su tre dimensioni: testo (una poesia generata in base al gesto mostrato), suono e spazio. L'esperienza completa è accessibile direttamente tramite lo strumento web, apribile da questa pagina."
+          },
+          srcs: ['images/project-02/03.png', 'images/project-02/04.png', 'images/project-02/05.mp4', 'images/project-02/06.mp4']
+        },
+        { type: 'single', srcs: ['images/project-02/08.jpg'] },
+        { type: 'single', srcs: ['images/project-02/09.jpg'] },
+        { type: 'single', srcs: ['images/project-02/10.jpg'] },
+        { type: 'single', srcs: ['images/project-02/07.mov'] }
+      ]
+    },
+    {
+      id: '03',
+      title: 'Reading Machines',
+      year: '2024',
+      category: 'Design Research',
+      description: {
+        en: 'Reading Machines is an ongoing thesis research project, currently in development and due to be completed in August 2026. The project explores reading through the lens of machine perception. <br><br> Starting from experiments with asemic writing, the research investigates how Optical Character Recognition (OCR) systems interpret and reconstruct visual language. Rather than treating OCR as a tool for extracting text, the project reuses its perceptual logic as a design material. Detection areas, contours, and spatial mappings generated by machine reading are transformed into new visual forms, questioning how language can be represented beyond human modes of interpretation. <br><br>Positioned between typography, graphic design, and computer vision, the project explores machine reading as a space for the production of alternative forms of writing.',
+        it: "Reading Machines è un progetto di ricerca per la tesi magistrale, attualmente in sviluppo e con conclusione prevista ad agosto 2026. Il progetto esplora la scrittura attraverso la lente della percezione delle macchine.<br><br> Partendo da esperimenti con la scrittura asemica, la ricerca indaga come i sistemi di Riconoscimento Ottico dei Caratteri (OCR) interpretino e ricostruiscano il linguaggio visivo. Anziché trattare l'OCR come uno strumento per estrarre testo, il progetto ne reimpiega la logica percettiva come materiale di design. Le aree di rilevamento, i contorni e le mappature spaziali generate dalla lettura automatica vengono trasformate in nuove forme visive, interrogando come il linguaggio possa essere rappresentato al di là delle modalità di interpretazione umane. <br><br>Posizionato tra tipografia, graphic design e computer vision, il progetto esplora la lettura automatica come spazio per la produzione di forme alternative di scrittura."
+      },
+      base: 'images/project-03/',
+      webtool: 'https://melina121100.github.io/reading-machines/',
+      webtoolLabel: '↗ Open documentation',
+      customSlides: [
+        { type: 'single', srcs: ['images/project-03/development/cover.png'] },
+        { type: 'text', label: { en: 'Concept', it: 'Concept' }, text: { en: '', it: '' }, srcs: ['images/project-03/concept/03.jpg','images/project-03/concept/04.jpg','images/project-03/concept/05.jpg'] },
+        { type: 'text', label: { en: 'Process', it: 'Processo' }, text: { en: '', it: '' }, srcs: ['images/project-03/process/06.jpg','images/project-03/process/07.jpg','images/project-03/process/08.jpg','images/project-03/process/09.png','images/project-03/process/11.jpg','images/project-03/process/12.jpg','images/project-03/process/13.jpg','images/project-03/process/14.jpg'] },
+        { type: 'double', srcs: ['images/project-03/development/0.jpg', 'images/project-03/development/01.png'] },
+        { type: 'double', srcs: ['images/project-03/development/01 2.png', 'images/project-03/development/01_loop.png'] },
+        { type: 'single', srcs: ['images/project-03/development/03.png'] },
+        { type: 'double', srcs: ['images/project-03/development/1.jpg', 'images/project-03/development/02 2.png'] },
+        { type: 'double', srcs: ['images/project-03/development/2.jpeg', 'images/project-03/development/02.png'] },
+        { type: 'single', srcs: ['images/project-03/development/02_overlayedmanipulation.png'] },
+        { type: 'single', srcs: ['images/project-03/development/08.mp4'] },
+        { type: 'single', srcs: ['images/project-03/development/9.png'] },
+        { type: 'single', srcs: ['images/project-03/development/10.mp4'] },
+        { type: 'single', srcs: ['images/project-03/development/11.png'] }
+      ]
+    },
+    {
+      id: '04',
+      title: 'Irei - Tikur',
+      year: '2024',
+      category: 'Editorial Design',
+      description: {
+        en: 'Editorial design project developed for the release of Irei / Tikur, an album by composer and sound artist Ivan Liuzzo, published by ZOK Records (Lucerne, Switzerland). <br>The project involved the design of a printed booklet and a JP5 poster included in the cassette edition. The visual identity was conceived to extend the sonic experience into a tactile and editorial format, balancing typography, imagery, and materiality.<br><br>Released on May 30, 2025.<br><br>Credits: Music by Ivan Liuzzo<br>Cover photography by Martha Micali<br>Published by ZOK Records Florian Walter, Felix Nussbaumer',
+        it: "Progetto di editorial design sviluppato per la pubblicazione di Irei / Tikur, un album del compositore e sound artist Ivan Liuzzo, pubblicato da ZOK Records (Lucerna, Svizzera). Il progetto ha coinvolto la progettazione di un booklet stampato e un poster JP5 inclusi nell'edizione su cassetta. L'identità visiva è stata concepita per estendere l'esperienza sonora in un formato tattile ed editoriale, bilanciando tipografia, immagini e materialità.<br><br>Pubblicato il 30 maggio 2025.<br><br>Crediti: Musica di Ivan Liuzzo<br>Fotografia di copertina di Martha Micali<br>Pubblicato da ZOK Records Florian Walter, Felix Nussbaumer"
+      },
+      base: 'images/project-04/',
+      slides: [
+        '16.jpg',
+        '10.jpg','11.jpg','12.jpg','13.jpg',
+        '14.jpg','15.jpg','17.jpg','02.jpg','01.jpg','project_cover.jpg','03.jpg','09.gif'
+      ]
+    },
+    {
+      id: '05',
+      title: 'Dal Mio Occhio',
+      year: '2025',
+      category: 'Editorial Design',
+      description: {
+        en: "Dal mio occhio is a 230-page book archiving photographs taken between 1984 and 2022 by Roberto Valdata. <br><br>The project began with the cataloguing and classification of a large corpus of images, from which the selection for the twelve chapters of the book was drawn. Each chapter constitutes an independent visual collection, distinct in form and subject, yet arranged to follow a unified narrative arc.<br><br> Together they trace fragments of Roberto Valdata's human and visual perspective: temporal moments, distances, and varying intensities of observation. <br><br>The book was entirely designed and produced, including cover and binding.",
+        it: "Dal mio occhio è un libro di 230 pagine che raccoglie fotografie scattate tra il 1984 e il 2022 da Roberto Valdata. <br><br>Il progetto è iniziato con la catalogazione e classificazione di un ampio corpus di immagini, da cui è stata tratta la selezione per i dodici capitoli del libro. Ogni capitolo costituisce una raccolta visiva indipendente, distinta per forma e soggetto, ma disposta per seguire un arco narrativo unitario. <br><br>Insieme tracciano frammenti della prospettiva umana e visiva di Roberto Valdata: momenti temporali, distanze e variabili intensità di osservazione. <br><br>Il libro è stato interamente progettato e prodotto, compresa la copertina e la rilegatura."
+      },
+      base: 'images/project-05/',
+      slides: [
+        'project-06-cover.jpg',
+        '02.jpg','03.jpg','04.gif','04.jpg',
+        '05.jpg','06.jpg','07.jpg','08.jpg',
+        '10.jpeg','11.jpg','12.jpg'
+      ]
+    },
+    {
+      id: '06',
+      title: 'Le Chat Noir',
+      year: '2023',
+      category: 'Brand Identity',
+      description: {
+        en: 'A rebranding project developed from the analysis of Le Chat Noir, a historical brand whose visual identity remains highly recognizable despite its disappearance over time. <br><br>The project reinterprets and revitalizes the brand visual language, translating its distinctive character into a contemporary context while preserving its cultural legacy. Through the development of a comprehensive brand book and a brand video, the project identifies and expands the core elements that define the identity of Le Chat Noir, establishing a coherent framework across both static and moving media. <br><br>By balancing historical references with contemporary design strategies, the project explores how a dormant brand can be reimagined and made relevant for a new audience.',
+        it: "Un progetto di rebranding sviluppato a partire dall'analisi di Le Chat Noir, un marchio storico la cui identità visiva rimane altamente riconoscibile nonostante la sua scomparsa nel tempo. <br><br>Il progetto reinterpreta e rivitalizza il linguaggio visivo del brand, traducendo il suo carattere distintivo in un contesto contemporaneo preservandone l'eredità culturale. Attraverso lo sviluppo di un brand book completo e un brand video, il progetto identifica e amplia gli elementi fondamentali che definiscono l'identità di Le Chat Noir, stabilendo un framework coerente tra media statici e in movimento. <br><br>Bilanciando riferimenti storici e strategie di design contemporanee, il progetto esplora come un brand dormiente possa essere reimmaginato e reso rilevante per un nuovo pubblico."
+      },
+      base: 'images/project-06/',
+      slides: [
+        'project_cover.jpg',
+        '11.jpg','12.jpg','13.jpg','14.jpg','15.jpg',
+        '06.jpg','07.jpg','08.jpg','10.png','01_Vega_LeChatNoir.mp4'
+      ],
+      audioSlides: [10]
+    },
+    {
+      id: '07',
+      title: 'Pile Dwellings',
+      year: '2023',
+      category: 'Visual Identity',
+      description: {
+        en: "Lake Garda Pile Dwellings (Palafitte Lago di Garda) is a project developed during a course at Politecnico di Milano as part of my undergraduate studies. <br><br>The brief focused on the creation of a complete Visual Identity for a UNESCO World Heritage site. The assigned site was the prehistoric Pile Dwellings located on Lake Garda, the aim was to valorize the site to give it a new visual impact. The project addressed the challenge of working with limited and intangible source material.<br><br> The design process began with the definition of core values and characteristics aimed at translating the site's historical and cultural significance into a meaningful visual identity and logo. The identity was then expanded through a series of complementary communication elements, including stationery, brochures, posters, gadgets, and ironic postcards designed to raise public awareness about the importance of preserving these largely invisible heritage sites.",
+        it: "Le Palafitte del Lago di Garda è un progetto sviluppato durante un corso al Politecnico di Milano nell'ambito degli studi triennali.<br><br>Il brief si concentrava sulla creazione di una Visual Identity completa per un sito patrimonio UNESCO. Il sito assegnato erano le palafitte preistoriche del Lago di Garda, con l'obiettivo di valorizzare il sito dandogli un nuovo impatto visivo. Il progetto ha affrontato la sfida di lavorare con materiale di partenza limitato e intangibile. <br><br>Il processo di design è iniziato con la definizione di valori e caratteristiche fondamentali volti a tradurre il significato storico e culturale del sito in una visual identity e un logo significativi. L'identità è stata poi ampliata attraverso una serie di elementi di comunicazione complementari, tra cui cancelleria, brochure, poster, gadget e cartoline ironiche progettate per sensibilizzare il pubblico sull'importanza di preservare questi siti del patrimonio largamente invisibili."
+      },
+      base: 'images/project-07/',
+      slides: [
+        'project-09-cover.jpg',
+                'logo/01.png','logo/02.png','logo/03.png',
+        'campagna poster/01.jpg','campagna poster/02.jpg',
+        'gadget/01.jpg','gadget/02.jpg','gadget/03.jpg','gadget/04.jpg',
+        'stampe/01.jpg','stampe/02.jpg','stampe/03.jpg','stampe/01 copy.jpg','stampe/03 copy.jpg','stampe/04.jpg'
+      ]
+    },
+  ];
+
+  // Additional projects living on the "Drafts" page — index-only entries
+  // (no full slider section is built for these on the home page).
+  const moreProjects = [
+    { id: '08', title: 'Glitch', year: '2025', category: 'Experimental', cover: 'drafts/01/04.gif', href: 'drafts.html' },
+    { id: '09', title: 'Anthony', year: '2025', category: 'Short project', cover: 'drafts/03/01.MP4', href: 'drafts.html' },
+    { id: '10', title: 'Il coniatore', year: '2024', category: 'Short project', cover: 'drafts/04/01.jpg', href: 'drafts.html' },
+    { id: '11', title: 'Glitch II', year: '2025', category: 'Experimental', cover: 'drafts/05/glitch_01.gif', href: 'drafts.html' },
+    { id: '12', title: 'Touchdesigner', year: '2026', category: 'Experimental', cover: 'drafts/06/01.mov', href: 'drafts.html' },
+    { id: '13', title: 'Jesus Rafael Soto', year: '2026', category: 'Short project', cover: 'drafts/08/project_cover.gif', href: 'drafts.html' },
+  ];
+
+  const container = document.getElementById('projects-container');
+  const iaList = document.getElementById('ia-list');
+
+  function isPortrait(src) {
+    return new Promise(resolve => {
+      const img = new Image();
+      img.onload = () => resolve(img.naturalHeight > img.naturalWidth);
+      img.onerror = () => resolve(false);
+      img.src = src;
+    });
+  }
+
+  function mediaEl(src, withAudio = false) {
+    const ext = src.split('.').pop().toLowerCase();
+    if (['mp4','mov','webm'].includes(ext)) {
+      return `<video autoplay loop muted playsinline preload="auto" src="${src}"${withAudio ? ' data-audio' : ''}></video>`;
+    }
+    return `<img src="${src}" alt="">`;
+  }
+
+  // Resolves with the media's natural pixel size once it's known, so a
+  // slide's actual aspect ratio can be used to size its slider box —
+  // that's what keeps images full-proportion with no dead space around them.
+  function mediaNaturalSize(el) {
+    return new Promise(resolve => {
+      if (el.tagName === 'IMG') {
+        if (el.complete && el.naturalWidth) resolve({ w: el.naturalWidth, h: el.naturalHeight });
+        else el.addEventListener('load', () => resolve({ w: el.naturalWidth, h: el.naturalHeight }), { once: true });
+        el.addEventListener('error', () => resolve(null), { once: true });
+      } else {
+        if (el.readyState >= 1 && el.videoWidth) resolve({ w: el.videoWidth, h: el.videoHeight });
+        else el.addEventListener('loadedmetadata', () => resolve({ w: el.videoWidth, h: el.videoHeight }), { once: true });
+        el.addEventListener('error', () => resolve(null), { once: true });
+      }
+    });
+  }
+
+  function t(val) {
+    if (typeof val === 'object' && val !== null) return val[currentLang] || val.en;
+    return val;
+  }
+
+  async function buildProject(p) {
+    let slideGroups = [];
+    if (p.customSlides) {
+      slideGroups = p.customSlides;
+    } else {
+      const srcs = p.slides.map(f => p.base + f);
+      const small = p.smallSlides || [];
+      const audioFiles = new Set((p.audioSlides || []).map(i => srcs[i]));
+      const portraits = await Promise.all(srcs.map(src => {
+        const ext = src.split('.').pop().toLowerCase();
+        if (['mp4','mov','webm','gif'].includes(ext)) return Promise.resolve(false);
+        return isPortrait(src);
+      }));
+      let i = 0;
+      while (i < srcs.length) {
+        if (small.includes(i)) {
+          slideGroups.push({ type: 'small', srcs: [srcs[i]], audio: audioFiles.has(srcs[i]) }); i++;
+        } else if (portraits[i] && i + 1 < srcs.length && portraits[i + 1] && !small.includes(i + 1)) {
+          slideGroups.push({ type: 'double', srcs: [srcs[i], srcs[i + 1]], audio: audioFiles.has(srcs[i]) || audioFiles.has(srcs[i+1]) }); i += 2;
+        } else {
+          slideGroups.push({ type: 'single', srcs: [srcs[i]], audio: audioFiles.has(srcs[i]) }); i++;
+        }
+      }
+    }
+
+    const total = slideGroups.length;
+    const section = document.createElement('section');
+    section.className = 'project';
+    section.id = `project-${p.id}`;
+
+    const slidesHTML = slideGroups.map(g => {
+      if (g.type === 'text') {
+        const imgsHTML = g.srcs ? `<div class="slide-text-images">${g.srcs.map(s => mediaEl(s, g.audio)).join('')}</div>` : '';
+        const hasText = g.text && (typeof g.text === 'string' ? g.text : g.text.en);
+        const extraClass = !hasText ? ' images-only' : '';
+        return `<div class="slide text${extraClass}">${hasText ? `<div class="slide-label">${t(g.label)}</div><p data-en="${typeof g.text === 'object' ? g.text.en.replace(/"/g,'&quot;') : g.text}" data-it="${typeof g.text === 'object' ? g.text.it.replace(/"/g,'&quot;') : g.text}">${t(g.text)}</p>` : ''}${imgsHTML}</div>`;
+      } else if (g.type === 'row') {
+        return `<div class="slide row">${g.srcs.map(s => mediaEl(s)).join('')}</div>`;
+      } else if (g.type === 'double') {
+        return `<div class="slide double">${g.srcs.map((s) => mediaEl(s, g.audio)).join('')}</div>`;
+      } else if (g.type === 'small') {
+        return `<div class="slide small">${mediaEl(g.srcs[0], g.audio)}</div>`;
+      } else {
+        return `<div class="slide">${mediaEl(g.srcs[0], g.audio)}</div>`;
+      }
+    }).join('');
+
+    const webtoolHTML = p.webtool ? `<a class="webtool" href="${p.webtool}" target="_blank">${p.webtoolLabel || '↗ Open web tool'}</a>` : '';
+    const descEn = typeof p.description === 'object' ? p.description.en : p.description;
+    const descIt = typeof p.description === 'object' ? p.description.it : p.description;
+    const hasAudio = slideGroups.some(g => g.audio === true);
+
+    section.innerHTML = `
+      <div class="meta">
+        <div class="title-row">
+          <span class="idx">${p.id}</span>
+          <p class="proj-title"><span>${p.title}</span></p>
+        </div>
+        <div class="category-row">
+          <div class="category">${p.category}</div>
+          <button class="desc-toggle" type="button">+</button>
+        </div>
+        <div class="meta-bottom">
+          <div class="desc" data-en="${descEn.replace(/"/g,'&quot;')}" data-it="${descIt.replace(/"/g,'&quot;')}">${t(p.description)}</div>
+          ${webtoolHTML}
+          <div class="year">${p.year}</div>
+        </div>
+      </div>
+      <div class="slider" data-slider data-total="${total}">
+        <div class="track">${slidesHTML}</div>
+        <div class="slide-counter">1 / ${total}</div>
+        <div class="slider-cursor" aria-hidden="true">→</div>
+        ${hasAudio ? '<button class="audio-toggle">Audio off</button>' : ''}
+      </div>
+    `;
+
+    container.appendChild(section);
+
+    const descEl = section.querySelector('.desc');
+    const descToggle = section.querySelector('.desc-toggle');
+    if (descEl && descToggle) {
+      descToggle.addEventListener('click', () => {
+        const isOpen = descEl.classList.toggle('open');
+        descToggle.textContent = isOpen ? '-' : '+';
+      });
+    }
+
+    const slider = section.querySelector('[data-slider]');
+    const track = slider.querySelector('.track');
+    const counter = slider.querySelector('.slide-counter');
+    const slideEls = Array.from(slider.querySelectorAll('.slide'));
+    let idx = 0;
+
+    const audioMap = {};
+    slideEls.forEach((slide, i) => {
+      const vids = Array.from(slide.querySelectorAll('video[data-audio]'));
+      if (vids.length > 0) audioMap[i] = vids;
+    });
+
+    let audioEnabled = false;
+    const audioBtn = slider.querySelector('.audio-toggle');
+
+    function updateAudio() {
+      Object.entries(audioMap).forEach(([i, vids]) => {
+        vids.forEach(v => { v.muted = !audioEnabled || (parseInt(i) !== idx); });
+      });
+      if (audioBtn) audioBtn.style.display = audioMap[idx] ? 'block' : 'none';
+    }
+
+    function goTo(n) {
+      if (n >= slideEls.length) {
+        idx = 0;
+      } else {
+        idx = Math.max(0, Math.min(slideEls.length - 1, n));
+      }
+      track.style.transform = `translateX(-${idx * 100}%)`;
+      if (counter) counter.textContent = `${idx + 1} / ${slideEls.length}`;
+      updateAudio();
+      applySliderHeight();
+    }
+
+    // Single/small/double slides get a box sized to their own image instead
+    // of the shared fixed slider height — that's what removes the blank
+    // gap between the picture and the slide counter without cropping.
+    function applySliderHeight() {
+      const activeSlide = slideEls[idx];
+      const needed = activeSlide && activeSlide.dataset.neededHeight;
+      if (needed) {
+        const maxH = window.innerHeight * 0.82;
+        const minH = 260;
+        slider.style.height = Math.max(minH, Math.min(parseFloat(needed), maxH)) + 'px';
+      } else {
+        slider.style.height = '';
+      }
+    }
+
+    async function measureSlideHeights() {
+      const w = slider.clientWidth || slider.getBoundingClientRect().width || 1;
+      await Promise.all(slideEls.map(async (slideEl, i) => {
+        const group = slideGroups[i];
+        if (!group || !['single', 'small', 'double'].includes(group.type)) return;
+        const medias = Array.from(slideEl.querySelectorAll('img, video'));
+        if (medias.length === 0) return;
+        const sizes = await Promise.all(medias.map(mediaNaturalSize));
+        const valid = sizes.filter(Boolean);
+        if (valid.length === 0) return;
+        let neededHeight;
+        if (group && group.type === 'double' && valid.length === 2) {
+          const halfW = w / 2;
+          neededHeight = Math.max(...valid.map(s => halfW * (s.h / s.w)));
+        } else {
+          neededHeight = w * (valid[0].h / valid[0].w);
+        }
+        slideEl.dataset.neededHeight = String(neededHeight);
+      }));
+      applySliderHeight();
+    }
+
+    const cursor = slider.querySelector('.slider-cursor');
+
+    slider.addEventListener('mousemove', e => {
+      const rect = slider.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      cursor.style.left = x + 'px';
+      cursor.style.top = y + 'px';
+      cursor.style.display = 'block';
+      cursor.textContent = x > slider.offsetWidth * 0.5 ? '→' : '←';
+    });
+
+    slider.addEventListener('mouseleave', () => {
+      cursor.style.display = 'none';
+    });
+
+    slider.addEventListener('click', e => {
+      const x = e.clientX - slider.getBoundingClientRect().left;
+      goTo(x > slider.offsetWidth * 0.5 ? idx + 1 : idx - 1);
+    });
+    slider.setAttribute('tabindex', '0');
+    slider.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') goTo(idx + 1);
+      if (e.key === 'ArrowLeft') goTo(idx - 1);
+    });
+
+    // Touch swipe support (mobile has no hover/click-zones, only tap+drag).
+    let touchStartX = 0, touchStartY = 0, touchActive = false;
+    slider.addEventListener('touchstart', e => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      touchActive = true;
+    }, { passive: true });
+    slider.addEventListener('touchend', e => {
+      if (!touchActive) return;
+      touchActive = false;
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      const dy = e.changedTouches[0].clientY - touchStartY;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+        goTo(dx < 0 ? idx + 1 : idx - 1);
+      }
+    }, { passive: true });
+
+    if (audioBtn) {
+      audioBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        audioEnabled = !audioEnabled;
+        audioBtn.textContent = audioEnabled ? 'Audio on' : 'Audio off';
+        updateAudio();
+      });
+    }
+
+    updateAudio();
+    measureSlideHeights();
+
+    let sliderResizeTimer = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(sliderResizeTimer);
+      sliderResizeTimer = setTimeout(measureSlideHeights, 150);
+    });
+
+    if (Object.keys(audioMap).length > 0) {
+      const visibilityObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) Object.values(audioMap).flat().forEach(v => { v.muted = true; });
+          else updateAudio();
+        });
+      }, { threshold: 0.2 });
+      visibilityObserver.observe(section);
+    }
+  }
+
+  const iaVisual = document.getElementById('ia-visual');
+  const iaCover = document.getElementById('ia-cover-hover');
+
+  const iaCoverSrcs = projects.map(p => p.indexCover ? p.indexCover : p.customSlides ? p.customSlides[0].srcs[0] : p.base + p.slides[0])
+    .concat(moreProjects.map(p => p.cover));
+
+  let iaAutoIndex = 0;
+  let iaAutoTimer = null;
+  let iaHovering = false;
+
+  // Cover thumbnails can be images OR videos (.mp4/.mov/.webm) — an <img>
+  // tag can't render a video file, so build the right element for each.
+  function setIaCover(src) {
+    const isVideo = /\.(mp4|mov|webm)$/i.test(src);
+    iaCover.innerHTML = isVideo
+      ? `<video autoplay loop muted playsinline src="${src}"></video>`
+      : `<img src="${src}" alt="">`;
+  }
+
+  function iaShowAuto() {
+    if (iaHovering || iaCoverSrcs.length === 0) return;
+    setIaCover(iaCoverSrcs[iaAutoIndex]);
+    iaCover.classList.add('visible');
+    iaVisual.classList.add('hovering');
+    iaAutoIndex = (iaAutoIndex + 1) % iaCoverSrcs.length;
+  }
+
+  function iaStartAuto() {
+    iaShowAuto();
+    if (iaAutoTimer) clearInterval(iaAutoTimer);
+    iaAutoTimer = setInterval(iaShowAuto, 500);
+  }
+
+  function iaStopAuto() {
+    if (iaAutoTimer) { clearInterval(iaAutoTimer); iaAutoTimer = null; }
+  }
+
+  const allIndexEntries = projects.map(p => ({ id: p.id, title: p.title, category: p.category, year: p.year, href: `#project-${p.id}`, internal: true }))
+    .concat(moreProjects.map(p => ({ id: p.id, title: p.title, category: p.category, year: p.year, href: p.href, internal: false })));
+
+  allIndexEntries.forEach((p, pIdx) => {
+    const a = document.createElement('a');
+    a.className = 'ia-row';
+    a.href = p.href;
+    a.innerHTML = `
+      <span class="ia-num">${p.id}</span>
+      <span class="ia-title"><span>${p.title}</span></span>
+      <span class="ia-cat">${p.category}</span>
+      <span class="ia-year">${p.year}</span>
+    `;
+    const coverSrc = iaCoverSrcs[pIdx];
+    a.addEventListener('mouseenter', () => {
+      iaHovering = true;
+      setIaCover(coverSrc);
+      iaCover.classList.add('visible');
+      iaVisual.classList.add('hovering');
+    });
+    a.addEventListener('mouseleave', () => {
+      iaHovering = false;
+      iaShowAuto();
+    });
+    if (p.internal) a.addEventListener('click', () => closeIA());
+    iaList.appendChild(a);
+  });
+
+  // Show the index graphic only if it actually loads; otherwise keep it hidden (no placeholder box)
+  (function () {
+    const g = document.getElementById('ia-graphic');
+    if (!g) return;
+    const probe = new Image();
+    probe.onload = () => { g.style.display = ''; };
+    probe.onerror = () => { g.style.display = 'none'; };
+    probe.src = g.getAttribute('src');
+  })();
+
+  (async () => {
+    for (const p of projects) await buildProject(p);
+  })();
+
+  const langToggleBtn = document.getElementById('lang-toggle');
+  const langToggleIA = document.getElementById('lang-toggle-ia');
+
+  function applyLang(lang) {
+    currentLang = lang;
+    const label = lang === 'en' ? 'It/En' : 'En/It';
+    langToggleBtn.textContent = label;
+    langToggleIA.textContent = label;
+    document.querySelectorAll('[data-en][data-it]').forEach(el => {
+      el.innerHTML = el.getAttribute('data-' + lang);
+    });
+    document.querySelectorAll('.desc-toggle').forEach(btn => {
+      const descEl = btn.closest('.meta')?.querySelector('.desc');
+      const isOpen = descEl && descEl.classList.contains('open');
+      btn.textContent = isOpen ? '-' : '+';
+    });
+  }
+
+  langToggleBtn.addEventListener('click', () => applyLang(currentLang === 'en' ? 'it' : 'en'));
+  langToggleIA.addEventListener('click', () => applyLang(currentLang === 'en' ? 'it' : 'en'));
+
+  const iaOverlay = document.getElementById('ia-overlay');
+
+  function openIA() {
+    iaOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    iaStartAuto();
+  }
+  function closeIA() {
+    iaOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+    iaStopAuto();
+  }
+
+  document.getElementById('indexabout-btn').addEventListener('click', e => { e.preventDefault(); openIA(); });
+  document.getElementById('home-brand-btn').addEventListener('click', e => { e.preventDefault(); openIA(); });
+  document.getElementById('about-btn-main').addEventListener('click', e => { e.preventDefault(); openIA(); });
+  document.getElementById('about-btn-ia').addEventListener('click', e => { e.preventDefault(); });
+  document.getElementById('ia-close-btn').addEventListener('click', e => { e.preventDefault(); });
+  document.getElementById('selected-works-ia').addEventListener('click', e => { e.preventDefault(); closeIA(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+  document.getElementById('ia-home-btn').addEventListener('click', e => { e.preventDefault(); closeIA(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+  if (window.location.hash === '#index' || window.location.hash === '#about') {
+    openIA();
+  }
+
+  const progressEl = document.getElementById('progress');
+  window.addEventListener('scroll', () => {
+    const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100;
+    progressEl.style.width = pct + '%';
+  }, { passive: true });
+</script>
+</body>
+</html>

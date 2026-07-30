@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drafts | Melina Valdata</title>
+  <style>
+    @font-face {
+      font-family: 'Favorit';
+      src: url('fonts/ABCFavorit-Regular-Trial.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'ABC Connect Hex';
+      src: url('fonts/ABCConnect-Hex-Trial.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    :root {
+      --bg: #ffffff;
+      --fg: #111111;
+      --line: rgba(17,17,17,0.1);
+      --meta-w: clamp(220px, 32vw, 400px);
+      --nav-h: 50px;
+      --font: 'Favorit', Helvetica, Arial, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--fg);
+      font-family: var(--font); font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .topbar {
+      position: sticky; top: 0; z-index: 50; height: var(--nav-h);
+      background: var(--bg);
+      display: grid; grid-template-columns: var(--meta-w) 1fr auto;
+      align-items: center; padding: 0 0 0 24px;
+    }
+    .brand-group { display: flex; flex-direction: column; font-size: 13px; letter-spacing: 0.01em; line-height: 1; padding: 4px 24px 4px 0; width: 100%; }
+    .brand-line2 { display: flex; justify-content: flex-end; }
+    .brand { font-size: 13px; font-weight: 400; letter-spacing: 0.01em; transition: color 0.25s ease; }
+    .brand:hover { color: rgba(17,17,17,0.35); }
+    .bracket { color: var(--fg); }
+    .tab-active { color: rgb(91,90,90); }
+    .tab-hidden { color: var(--bg); }
+    .tab-hidden:hover { color: var(--fg); }
+    .nav-toggle { display: inline-flex; align-items: baseline; font-size: 13px; gap: 6px; }
+    .nav-toggle a { font-size: 13px; letter-spacing: 0.03em; }
+    .nav-word { color: var(--bg); }
+    .nav-word:hover { color: var(--fg); }
+    .topbar-nav { display: flex; gap: 24px; justify-content: center; align-items: baseline; }
+    .topbar-right { width: var(--meta-w); display: flex; justify-content: flex-end; padding-right: 24px; }
+
+    .list-page { padding: 24px 24px 160px; max-width: none; margin: 0; }
+    .list-intro { font-size: 13px; color: rgba(17,17,17,0.4); margin: 0 0 0; max-width: 480px; line-height: 1; }
+
+    .exp-row {
+      display: grid; grid-template-columns: minmax(260px, 1fr) clamp(280px, 30vw, 460px) minmax(260px, 1fr);
+      column-gap: clamp(16px, 3vw, 32px); align-items: start;
+      padding: 0px 0;
+    }
+    .exp-row.large { grid-template-columns: minmax(260px, 1fr) clamp(420px, 48vw, 760px) minmax(260px, 1fr); }
+
+    .exp-col-left { align-self: stretch; display: flex; flex-direction: column; }
+    .exp-col-right { align-self: end; display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
+
+    .exp-toggle-row { display: flex; align-items: baseline; font-size: 13px; color: rgba(17,17,17,0.5); width: 100%; }
+    .exp-toggle-row .bracket { color: rgba(17,17,17,0.5); }
+    .exp-toggle {
+      cursor: pointer; padding: 0 8px; color: var(--fg); user-select: none;
+      background: none; border: none; font-family: var(--font); font-size: 13px;
+      transition: color 0.2s ease;
+    }
+    .exp-toggle:hover { color: rgb(91,90,90); }
+    .exp-toggle-row .spacer { flex: 1; }
+
+    .exp-desc-panel {
+      display: none; margin-top: auto; font-size: 15px; line-height: 1;
+      color: rgba(17,17,17,0.6); max-width: none; width: 100%;
+      text-align: justify; text-justify: inter-word;
+    }
+    .exp-desc-panel.open { display: block; }
+
+    .exp-main-media { display: flex; justify-self: center; justify-content: center; align-items: center; width: 100%; }
+    .exp-main-media img, .exp-main-media video {
+      display: block; width: auto; height: auto; max-width: 100%; max-height: 78vh; object-fit: contain;
+    }
+
+    /* Slideshow containers: height is set in px by JS to match each slide's
+       own natural size (capped at 78vh), so rows stay as tight as a static
+       image would be — only the height transitions smoothly, it isn't
+       reserved as a big empty box. Crossfade replaces the abrupt swap. */
+    .exp-main-media.has-slideshow { position: relative; transition: height 0.4s ease; }
+    .exp-main-media.has-slideshow .slide {
+      position: absolute; inset: 0; margin: auto;
+      width: auto; height: auto; max-width: 100%; max-height: 100%;
+      object-fit: contain; opacity: 0; transition: opacity 0.7s ease;
+    }
+    .exp-main-media.has-slideshow .slide.active { opacity: 1; }
+
+    @media (max-width: 860px) {
+      /* .exp-row.large has its own (wider, desktop-only) column definition
+         with a 420px floor — without overriding it here too, that floor
+         alone forced horizontal overflow on every phone width. Mobile just
+         shows the image, centered, nothing else. */
+      .exp-row, .exp-row.large {
+        grid-template-columns: 1fr; padding: 36px 16px; row-gap: 0;
+      }
+      .exp-col-left, .exp-col-right { display: none; }
+      .exp-main-media { justify-self: center; }
+      .list-page { padding: 24px 0 100px; overflow-x: hidden; }
+      .list-intro { margin: 0 20px; }
+
+      /* Brand on the left, Index/About truly centered on the viewport,
+         language toggle on the right. */
+      .topbar {
+        display: flex; grid-template-columns: none; position: relative;
+        align-items: center; justify-content: space-between;
+        padding: 0 14px; gap: 10px;
+      }
+      .brand-group { flex: 0 1 auto; width: auto; min-width: 0; padding: 4px 0; }
+      /* Drop the "Selected works | Drafts" toggle on mobile — just the
+         brand name, without its dangling bracket. */
+      .brand-line2 { display: none; }
+      .brand-line1 .bracket { display: none; }
+      .topbar-nav {
+        position: absolute; left: 50%; top: 50%;
+        transform: translate(-50%, -50%);
+      }
+      .topbar-right { width: auto; padding-right: 0; flex: 0 0 auto; }
+
+      /* No hover on touch, so Index/About stays visible instead of being
+         revealed only on mouseover. */
+      .nav-word { color: var(--fg); }
+    }
+
+    @media (max-width: 480px) {
+      .exp-row, .exp-row.large { padding: 28px 16px; }
+      .brand, .brand-line2 span, .brand-line2 a, .tab-active { font-size: 12px; }
+      .nav-toggle, .nav-toggle a { font-size: 12px; }
+    }
+
+    footer { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; }
+    footer .f-left, footer .f-right, footer .f-center { font-size: 12px; letter-spacing: 0.05em; color: var(--fg); }
+    footer .f-center:hover { opacity: 0.5; }
+    @media (max-width: 480px) {
+      footer { flex-wrap: wrap; gap: 6px 16px; justify-content: center; text-align: center; padding: 14px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <span class="brand-group">
+    <span class="brand-line1"><a class="brand" href="index.html">Melina Valdata</a> <span class="bracket">[</span></span>
+    <span class="brand-line2"><a href="index.html" class="tab-hidden">Selected works</a> <span class="bracket">|</span> <span class="tab-active">Drafts</span> <span class="bracket">]</span></span>
+  </span>
+  <nav class="topbar-nav">
+    <span class="nav-toggle">
+      <span class="bracket">[</span><a href="index.html#index" class="nav-word">Index</a><a href="index.html#about" class="nav-word">About</a><span class="bracket">]</span>
+    </span>
+  </nav>
+  <div class="topbar-right"></div>
+</header>
+
+<main class="list-page">
+
+  <p class="list-intro">collection of experiments | short projects | sketeches | work in progress | curiosites</p>
+
+  <div class="exp-row">
+    <div class="exp-col-left">
+      <div class="exp-toggle-row">
+        <span class="bracket">[</span><button class="exp-toggle" data-desc="desc-0">+</button><span class="spacer"></span><span class="bracket">]</span>
+      </div>
+      <p class="exp-desc-panel" id="desc-0">A glitch experiment on text formats. Using FFmpeg, .txt and .pdf files are distorted and reinterpreted as raw video data, corrupting their structure to generate unpredictable visual and typographic noise.</p>
+    </div>
+    <div class="exp-main-media has-slideshow" id="media-0"><video class="slide active" autoplay loop muted playsinline src="drafts/01/03.mov"></video></div>
+    <div class="exp-col-right"></div>
+  </div>
+
+  <div class="exp-row large">
+    <div class="exp-col-left">
+      <div class="exp-toggle-row">
+        <span class="bracket">[</span><button class="exp-toggle" data-desc="desc-2">+</button><span class="spacer"></span><span class="bracket">]</span>
+      </div>
+      <p class="exp-desc-panel" id="desc-2">A motion design short project resulting from a one-week workshop held by ffforum. Anthony is a typeface from Velvetyne; the short animation represents the font's main characteristics through the development of a character directly suggested by the name of the font itself.</p>
+    </div>
+    <div class="exp-main-media" id="media-2"><video autoplay loop muted playsinline src="drafts/03/01.MP4"></video></div>
+    <div class="exp-col-right"></div>
+  </div>
+
+  <div class="exp-row large">
+    <div class="exp-col-left">
+      <div class="exp-toggle-row">
+        <span class="bracket">[</span><button class="exp-toggle" data-desc="desc-3">+</button><span class="spacer"></span><span class="bracket">]</span>
+      </div>
+      <p class="exp-desc-panel" id="desc-3">A one-week workshop reimagining a new layout inside and out, including a new cover and identity for Luther Blissett's book 'Il coniatore.'</p>
+    </div>
+    <div class="exp-main-media has-slideshow" id="media-3"><img class="slide active" src="drafts/04/01.jpg" alt=""></div>
+    <div class="exp-col-right"></div>
+  </div>
+
+  <div class="exp-row">
+    <div class="exp-col-left">
+      <div class="exp-toggle-row">
+        <span class="bracket">[</span><button class="exp-toggle" data-desc="desc-4">+</button><span class="spacer"></span><span class="bracket">]</span>
+      </div>
+      <p class="exp-desc-panel" id="desc-4">More glitching experiments, this time on high- and low-resolution images. File formats are altered and misread, corrupting the image data to produce unpredictable visual distortions.</p>
+    </div>
+    <div class="exp-main-media has-slideshow" id="media-4"><img class="slide active" src="drafts/05/glitch_01.gif" alt=""></div>
+    <div class="exp-col-right"></div>
+  </div>
+
+  <div class="exp-row">
+    <div class="exp-col-left">
+      <div class="exp-toggle-row">
+        <span class="bracket">[</span><button class="exp-toggle" data-desc="desc-5">+</button><span class="spacer"></span><span class="bracket">]</span>
+      </div>
+      <p class="exp-desc-panel" id="desc-5">An experiment with TouchDesigner, exploring real-time generative visuals and interactive motion.</p>
+    </div>
+    <div class="exp-main-media" id="media-5"><video autoplay loop muted playsinline src="drafts/06/01.mp4"></video></div>
+    <div class="exp-col-right"></div>
+  </div>
+
+  <div class="exp-row large">
+    <div class="exp-col-left">
+      <div class="exp-toggle-row">
+        <span class="bracket">[</span><button class="exp-toggle" data-desc="desc-7">+</button><span class="spacer"></span><span class="bracket">]</span>
+      </div>
+      <p class="exp-desc-panel" id="desc-7">A short booklet retracing the life and career of Jesús Rafael Soto, moving through the key phases of his practice and reconstructing some of his most significant works.</p>
+    </div>
+    <div class="exp-main-media has-slideshow" id="media-7"><img class="slide active" src="drafts/08/01.jpg" alt=""></div>
+    <div class="exp-col-right"></div>
+  </div>
+</main>
+
+<footer>
+  <div class="f-left">Melina Valdata</div>
+  <a class="f-center" href="mailto:melinavaldata@gmail.com">melinavaldata@gmail.com</a>
+  <div class="f-right">© 2026</div>
+</footer>
+
+<script>
+  // Projects with more than one image/video cycle through them automatically.
+  const slideshows = {
+    'media-0': [
+      { type: 'video', src: 'drafts/01/03.mov' },
+      { type: 'img',   src: 'drafts/01/04.gif' },
+      { type: 'video', src: 'drafts/01/04.MP4' },
+      { type: 'video', src: 'drafts/01/05.mp4' },
+    ],
+    'media-3': [
+      { type: 'img', src: 'drafts/04/01.jpg' },
+      { type: 'img', src: 'drafts/04/02.jpg' },
+      { type: 'img', src: 'drafts/04/03.jpg' },
+      { type: 'img', src: 'drafts/04/04.jpg' },
+    ],
+    'media-4': [
+      { type: 'img',   src: 'drafts/05/glitch_01.gif' },
+      { type: 'img',   src: 'drafts/05/glitch2_01.gif' },
+      { type: 'img',   src: 'drafts/05/glitch_02.gif' },
+      { type: 'img',   src: 'drafts/05/glitch_02%202.gif' },
+      { type: 'img',   src: 'drafts/05/glitch_02%203.gif' },
+      { type: 'video', src: 'drafts/05/Screen%20Recording%202025-04-14%20at%2014.23.34.mov' },
+    ],
+    'media-7': [
+      { type: 'img', src: 'drafts/08/01.jpg' },
+      { type: 'img', src: 'drafts/08/02.jpg' },
+      { type: 'img', src: 'drafts/08/03.jpg' },
+      { type: 'img', src: 'drafts/08/04.jpg' },
+      { type: 'img', src: 'drafts/08/05.jpg' },
+      { type: 'img', src: 'drafts/08/06.jpg' },
+      { type: 'img', src: 'drafts/08/07.jpg' },
+      { type: 'img', src: 'drafts/08/08.jpg' },
+      { type: 'img', src: 'drafts/08/09.jpg' },
+      { type: 'img', src: 'drafts/08/10.jpg' },
+      { type: 'img', src: 'drafts/08/11.jpg' },
+    ],
+  };
+
+  const SLIDE_INTERVAL = 3500; // ms between image changes
+  const FADE_MS = 700; // must match the CSS transition duration
+
+  function makeSlideEl(s) {
+    const el = document.createElement(s.type === 'video' ? 'video' : 'img');
+    el.className = 'slide';
+    if (s.type === 'video') {
+      el.autoplay = true;
+      el.loop = true;
+      el.muted = true;
+      el.playsInline = true;
+    } else {
+      el.alt = '';
+    }
+    el.src = s.src;
+    return el;
+  }
+
+  // Sets the container's height (in px) to match this slide's own
+  // aspect ratio at the container's current width, capped at 78vh —
+  // this is what keeps rows as tight as a plain static image would be.
+  function fitContainerToSlide(container, naturalW, naturalH) {
+    if (!naturalW || !naturalH) return;
+    const w = container.clientWidth || container.getBoundingClientRect().width || 1;
+    const maxH = window.innerHeight * 0.78;
+    container.style.height = Math.min(w * (naturalH / naturalW), maxH) + 'px';
+  }
+
+  // Calls back once natural dimensions are known (image load / video metadata).
+  function whenSized(el, cb) {
+    if (el.tagName === 'IMG') {
+      if (el.complete && el.naturalWidth) cb(el.naturalWidth, el.naturalHeight);
+      else el.addEventListener('load', () => cb(el.naturalWidth, el.naturalHeight), { once: true });
+    } else {
+      if (el.readyState >= 1 && el.videoWidth) cb(el.videoWidth, el.videoHeight);
+      else el.addEventListener('loadedmetadata', () => cb(el.videoWidth, el.videoHeight), { once: true });
+    }
+  }
+
+  Object.entries(slideshows).forEach(([id, slides]) => {
+    const container = document.getElementById(id);
+    if (!container) return;
+
+    const firstEl = container.querySelector('.slide');
+    if (firstEl) whenSized(firstEl, (w, h) => fitContainerToSlide(container, w, h));
+
+    if (slides.length <= 1) return;
+
+    let idx = 0;
+    let current = firstEl;
+
+    setInterval(() => {
+      idx = (idx + 1) % slides.length;
+      const nextEl = makeSlideEl(slides[idx]);
+      container.appendChild(nextEl);
+
+      whenSized(nextEl, (w, h) => {
+        fitContainerToSlide(container, w, h);
+        // Force layout so the opacity transition actually runs.
+        void nextEl.offsetWidth;
+        nextEl.classList.add('active');
+        const prevEl = current;
+        if (prevEl) prevEl.classList.remove('active');
+        current = nextEl;
+        setTimeout(() => { if (prevEl && prevEl.parentNode) prevEl.remove(); }, FADE_MS + 50);
+      });
+    }, SLIDE_INTERVAL);
+
+    // Re-fit the box if the viewport changes (e.g. rotating a phone) so the
+    // height stays matched to the current slide's aspect ratio.
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        if (!current) return;
+        whenSized(current, (w, h) => fitContainerToSlide(container, w, h));
+      }, 150);
+    });
+  });
+
+  document.querySelectorAll('.exp-toggle[data-desc]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const panel = document.getElementById(btn.getAttribute('data-desc'));
+      if (!panel) return;
+      const isOpen = panel.classList.toggle('open');
+      btn.textContent = isOpen ? '-' : '+';
+    });
+  });
+</script>
+
+</body>
+</html>
