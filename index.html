@@ -221,6 +221,20 @@
       .slide.text .slide-text-images img, .slide.text .slide-text-images video {
         max-height: 220px; flex: 1 1 45%;
       }
+      /* Image-only slides (several images, no paragraph) must stay static —
+         no internal scrolling. They get a fixed grid sized to the slider
+         itself instead of wrapping images at a fixed max-height, which is
+         what made the slide taller than its box and scrollable. */
+      .slide.text.images-only { overflow: hidden; padding: 28px 20px; }
+      .slide.text.images-only .slide-text-images {
+        display: grid; grid-template-columns: repeat(2, 1fr); grid-auto-rows: 1fr;
+        flex-wrap: nowrap; height: 100%; width: 100%; overflow: hidden; gap: 6px;
+      }
+      .slide.text.images-only .slide-text-images img,
+      .slide.text.images-only .slide-text-images video {
+        flex: initial; width: 100%; height: 100%; max-height: none;
+        object-fit: contain; object-position: center;
+      }
       /* Double-image slides (the 2-up ones) stay side by side on mobile too. */
       .slide.row { flex-direction: column; overflow-y: auto; gap: 8px; }
       .slide.row img, .slide.row video {
@@ -396,7 +410,7 @@
       },
       base: 'images/project-02/',
       webtool: 'https://melina121100.github.io/inHands/',
-      indexCover: 'images/project-02/project-02-cover.mov',
+      indexCover: 'images/project-02/09.jpg',
       customSlides: [
         { type: 'single', srcs: ['images/project-02/project-02-cover.mov'] },
         {
@@ -436,7 +450,7 @@
       webtool: 'https://melina121100.github.io/reading-machines/',
       webtoolLabel: '↗ Open documentation',
       customSlides: [
-        { type: 'single', srcs: ['images/project-03/development/cover.jpg'] },
+        { type: 'single', srcs: ['images/project-03/development/cover.png'] },
         { type: 'text', label: { en: 'Concept', it: 'Concept' }, text: { en: '', it: '' }, srcs: ['images/project-03/concept/03.jpg','images/project-03/concept/04.jpg','images/project-03/concept/05.jpg'] },
         { type: 'text', label: { en: 'Process', it: 'Processo' }, text: { en: '', it: '' }, srcs: ['images/project-03/process/06.jpg','images/project-03/process/07.jpg','images/project-03/process/08.jpg','images/project-03/process/09.png','images/project-03/process/11.jpg','images/project-03/process/12.jpg','images/project-03/process/13.jpg','images/project-03/process/14.jpg'] },
         { type: 'double', srcs: ['images/project-03/development/0.jpg', 'images/project-03/development/01.png'] },
