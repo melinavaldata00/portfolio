@@ -109,6 +109,7 @@
     .meta .desc-toggle:hover { color: var(--fg); text-decoration: underline; }
     .meta .webtool { font-size: 14px; color: var(--fg); text-decoration: none; display: inline-block; }
     .meta .webtool:hover { opacity: 0.45; font-style: italic; }
+    .webtool-arrow { display: inline-block; vertical-align: -0.5px; margin-right: 2px; }
     .meta .year { font-size: 15px; color: var(--fg); letter-spacing: 0.08em; font-family: 'ABC Connect Hex', var(--font); }
     .meta .meta-bottom { margin-top: auto; display: flex; flex-direction: column; gap: 6px; }
     .slider { position: relative; overflow: hidden; height: var(--slider-h); background: #fff; cursor: none; user-select: none; touch-action: pan-y; transition: height 0.4s ease; }
@@ -467,7 +468,7 @@
       },
       base: 'images/project-03/',
       webtool: 'https://melinavaldata00.github.io/Reading-Machines/',
-      webtoolLabel: '↗ Access tool',
+      webtoolLabel: 'Access tool',
       customSlides: [
         { type: 'single', srcs: ['images/project-03/development/01_cover.mp4'] },
         { type: 'text', label: { en: 'Process', it: 'Processo' }, text: { en: '', it: '' }, srcs: ['images/project-03/process/06.jpg','images/project-03/process/07.jpg','images/project-03/process/08.jpg','images/project-03/process/09.png','images/project-03/process/11.jpg','images/project-03/process/12.jpg','images/project-03/process/13.jpg','images/project-03/process/14.jpg'] },
@@ -653,7 +654,8 @@
       }
     }).join('');
 
-    const webtoolHTML = p.webtool ? `<a class="webtool" href="${p.webtool}" target="_blank">${p.webtoolLabel || '↗ Open web tool'}</a>` : '';
+    const webtoolArrow = '<svg class="webtool-arrow" width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M1.5 7.5L7.5 1.5M7.5 1.5H2.75M7.5 1.5V6.25" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    const webtoolHTML = p.webtool ? `<a class="webtool" href="${p.webtool}" target="_blank">${webtoolArrow} ${p.webtoolLabel || 'Open web tool'}</a>` : '';
     const descEn = typeof p.description === 'object' ? p.description.en : p.description;
     const descIt = typeof p.description === 'object' ? p.description.it : p.description;
     const hasAudio = slideGroups.some(g => g.audio === true);
