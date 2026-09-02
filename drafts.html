@@ -7,21 +7,39 @@
   <style>
     @font-face {
       font-family: 'Favorit';
-      src: url('fonts/ABCFavorit-Regular-Trial.otf') format('opentype');
+      src: url('fonts/ExcellentTrial-Regular.otf') format('opentype');
       font-weight: 400;
       font-style: normal;
       font-display: swap;
+      unicode-range: U+20, U+2C-39, U+41-5A, U+61-7A, U+AD, U+B6-B7, U+2019, U+2219;
+    }
+    @font-face {
+      font-family: 'Favorit';
+      src: url('fonts/ExcellentTrial-Italic.otf') format('opentype');
+      font-weight: 400;
+      font-style: italic;
+      font-display: swap;
+      unicode-range: U+20, U+2C-39, U+41-5A, U+61-7A, U+AD, U+B6-B7, U+2019, U+2219;
     }
     @font-face {
       font-family: 'ABC Connect Hex';
-      src: url('fonts/ABCConnect-Hex-Trial.otf') format('opentype');
+      src: url('fonts/ExcellentTrial-Regular.otf') format('opentype');
       font-weight: 400;
       font-style: normal;
       font-display: swap;
+      unicode-range: U+20, U+2C-39, U+41-5A, U+61-7A, U+AD, U+B6-B7, U+2019, U+2219;
+    }
+    @font-face {
+      font-family: 'ABC Connect Hex';
+      src: url('fonts/ExcellentTrial-Italic.otf') format('opentype');
+      font-weight: 400;
+      font-style: italic;
+      font-display: swap;
+      unicode-range: U+20, U+2C-39, U+41-5A, U+61-7A, U+AD, U+B6-B7, U+2019, U+2219;
     }
     :root {
       --bg: #ffffff;
-      --fg: #111111;
+      --fg: #606060;
       --line: rgba(17,17,17,0.1);
       --meta-w: clamp(220px, 32vw, 400px);
       --nav-h: 50px;
@@ -45,20 +63,20 @@
     .brand-group { display: flex; flex-direction: column; font-size: 13px; letter-spacing: 0.01em; line-height: 1; padding: 4px 24px 4px 0; width: 100%; }
     .brand-line2 { display: flex; justify-content: flex-end; }
     .brand { font-size: 13px; font-weight: 400; letter-spacing: 0.01em; transition: color 0.25s ease; }
-    .brand:hover { color: rgba(17,17,17,0.35); }
+    .brand:hover { color: rgba(96,96,96,0.35); }
     .bracket { color: var(--fg); }
-    .tab-active { color: rgb(91,90,90); }
+    .tab-active { color: #606060; }
     .tab-hidden { color: var(--bg); }
-    .tab-hidden:hover { color: var(--fg); }
+    .tab-hidden:hover { color: var(--fg); font-style: italic; }
     .nav-toggle { display: inline-flex; align-items: baseline; font-size: 13px; gap: 6px; }
     .nav-toggle a { font-size: 13px; letter-spacing: 0.03em; }
     .nav-word { color: var(--bg); }
-    .nav-word:hover { color: var(--fg); }
+    .nav-word:hover { color: var(--fg); font-style: italic; }
     .topbar-nav { display: flex; gap: 24px; justify-content: center; align-items: baseline; }
     .topbar-right { width: var(--meta-w); display: flex; justify-content: flex-end; padding-right: 24px; }
 
     .list-page { padding: 24px 24px 160px; max-width: none; margin: 0; }
-    .list-intro { font-size: 13px; color: rgba(17,17,17,0.4); margin: 0 0 0; max-width: 480px; line-height: 1; }
+    .list-intro { font-size: 13px; color: rgba(96,96,96,0.4); margin: 0 0 0; max-width: 480px; line-height: 1; }
 
     .exp-row {
       display: grid; grid-template-columns: minmax(260px, 1fr) clamp(280px, 30vw, 460px) minmax(260px, 1fr);
@@ -70,19 +88,19 @@
     .exp-col-left { align-self: stretch; display: flex; flex-direction: column; }
     .exp-col-right { align-self: end; display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
 
-    .exp-toggle-row { display: flex; align-items: baseline; font-size: 13px; color: rgba(17,17,17,0.5); width: 100%; }
-    .exp-toggle-row .bracket { color: rgba(17,17,17,0.5); }
+    .exp-toggle-row { display: flex; align-items: baseline; font-size: 13px; color: rgba(96,96,96,0.5); width: 100%; }
+    .exp-toggle-row .bracket { color: rgba(96,96,96,0.5); }
     .exp-toggle {
       cursor: pointer; padding: 0 8px; color: var(--fg); user-select: none;
       background: none; border: none; font-family: var(--font); font-size: 13px;
       transition: color 0.2s ease;
     }
-    .exp-toggle:hover { color: rgb(91,90,90); }
+    .exp-toggle:hover { color: #606060; }
     .exp-toggle-row .spacer { flex: 1; }
 
     .exp-desc-panel {
       display: none; margin-top: auto; font-size: 15px; line-height: 1;
-      color: rgba(17,17,17,0.6); max-width: none; width: 100%;
+      color: rgba(96,96,96,0.6); max-width: none; width: 100%;
       text-align: justify; text-justify: inter-word;
     }
     .exp-desc-panel.open { display: block; }
