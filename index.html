@@ -156,7 +156,7 @@
     footer .f-center:hover { opacity: 0.5; }
     .progress { position: fixed; bottom: 0; left: 0; height: 1px; background: var(--fg); z-index: 99; width: 0%; transition: width 0.1s linear; }
     /* Combined Index / About page */
-    #ia-overlay { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 200; overflow-y: auto; padding-top: var(--nav-h); }
+    #ia-overlay { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 200; overflow-y: hidden; padding-top: var(--nav-h); }
     #ia-overlay.open { display: block; }
     #ia-overlay .topbar { position: fixed; top: 0; left: 0; right: 0; z-index: 201; }
     #ia-overlay .topbar-right { display: flex; flex-direction: column; align-items: flex-end; justify-content: center; gap: 3px; }
@@ -191,6 +191,7 @@
     .ia-edu-item { display: flex; flex-direction: column; font-size: 14px; line-height: 1.4; }
     .ia-edu-title { color: var(--fg); }
     .ia-edu-meta { color: rgba(96,96,96,0.5); font-size: 13px; }
+    .feature-link { text-decoration: underline; color: #9a9a9a; }
     .ia-contact { display: flex; flex-direction: column; gap: 20px; }
     .ia-loc { font-size: 15px; line-height: 1.45; }
     .ia-contacts { font-size: 15px; line-height: 1.45; }
@@ -383,7 +384,7 @@
             <span class="ia-edu-meta">Tank, HGK Basel, 2026</span>
           </div>
           <div class="ia-edu-item">
-            <span class="ia-edu-title" data-en="Sweety — in <a href='https://www.antidisciplinarylab.it/rawscenarios/Sugar/' target='_blank'>Raw Scenarios</a>, reflections on human overconsumption" data-it="Sweety — in <a href='https://www.antidisciplinarylab.it/rawscenarios/Sugar/' target='_blank'>Raw Scenarios</a>, riflessioni sul sovraconsumo umano">Sweety — in <a href='https://www.antidisciplinarylab.it/rawscenarios/Sugar/' target='_blank'>Raw Scenarios</a>, reflections on human overconsumption</span>
+            <span class="ia-edu-title" data-en="Sweety — in <a class='feature-link' href='https://www.antidisciplinarylab.it/rawscenarios/Sugar/' target='_blank'>Raw Scenarios</a>, reflections on human overconsumption" data-it="Sweety — in <a class='feature-link' href='https://www.antidisciplinarylab.it/rawscenarios/Sugar/' target='_blank'>Raw Scenarios</a>, riflessioni sul sovraconsumo umano">Sweety — in <a class='feature-link' href='https://www.antidisciplinarylab.it/rawscenarios/Sugar/' target='_blank'>Raw Scenarios</a>, reflections on human overconsumption</span>
             <span class="ia-edu-meta">DOTDOTDOT, Milan, 2024</span>
           </div>
         </div>
