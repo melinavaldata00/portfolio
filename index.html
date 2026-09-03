@@ -213,6 +213,12 @@
       .ia-bio-wrap { order: 1; }
       .ia-contact { order: 2; }
       .ia-list { order: 3; }
+      /* Once the grid stacks into a single column, the visual can no longer
+         stay pinned to the bottom-left of the viewport (position:absolute) —
+         at this width the contact block (Basel/Milan/CV/email) now sits
+         where the visual used to float, so it goes back into the normal
+         flow below everything instead of overlapping it. */
+      .ia-visual { position: relative; left: auto; bottom: auto; width: 100%; margin-top: 24px; }
     }
     @media (max-width: 860px) { :root { --meta-w: 140px; } }
 
@@ -295,10 +301,6 @@
       #indexabout-btn, #ia-close-btn { display: none; }
 
       .ia-page { padding: 24px 16px 100px; }
-      /* The page scrolls on mobile (see #ia-overlay above), so the visual
-         goes back into the normal flow below the About content instead of
-         staying pinned to the viewport — it just scrolls into view. */
-      .ia-visual { position: relative; left: auto; bottom: auto; width: 100%; margin-top: 24px; }
       .ia-graphic { max-width: min(260px, 60vw); max-height: min(280px, 32vh); }
       .ia-cover-hover img, .ia-cover-hover video { max-width: min(260px, 60vw); max-height: min(280px, 32vh); }
 
