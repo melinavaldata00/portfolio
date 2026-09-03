@@ -186,7 +186,7 @@
     .ia-row .ia-year { font-size: 15px; letter-spacing: 0.04em; white-space: nowrap; font-family: 'ABC Connect Hex', var(--font); grid-column: 5; }
     .ia-bio-wrap { max-width: 560px; }
     .ia-bio { font-size: 15px; line-height: 1.45; color: var(--fg); max-width: 560px; }
-    .ia-education { display: flex; flex-direction: column; gap: 12px; margin-top: 28px; max-width: 560px; }
+    .ia-education { display: flex; flex-direction: column; gap: 7px; margin-top: 18px; max-width: 560px; }
     .ia-edu-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #606060; }
     .ia-edu-item { display: flex; flex-direction: column; font-size: 14px; line-height: 1.4; }
     .ia-edu-title { color: var(--fg); }
@@ -197,15 +197,14 @@
     .ia-contacts { font-size: 15px; line-height: 1.45; }
     .ia-contacts a:hover { opacity: 0.5; }
     .ia-visual {
-      position: relative; width: 100%; display: flex; justify-content: flex-start;
-      align-items: flex-end; margin-top: clamp(0px, 2vh, 30px); min-height: 460px;
-      pointer-events: none;
+      position: absolute; left: 24px; bottom: 24px; width: auto; display: flex;
+      justify-content: flex-start; align-items: flex-end; pointer-events: none;
     }
-    .ia-graphic { max-width: 420px; max-height: 460px; width: auto; height: auto; object-fit: contain; transition: opacity 0.18s; }
+    .ia-graphic { max-width: min(420px, 34vw); max-height: min(460px, 42vh); width: auto; height: auto; object-fit: contain; transition: opacity 0.18s; }
     .ia-visual.hovering .ia-graphic { opacity: 0; }
     .ia-cover-hover { position: absolute; bottom: 0; left: 0; opacity: 0; transition: opacity 0.18s; }
     .ia-cover-hover.visible { opacity: 1; }
-    .ia-cover-hover img, .ia-cover-hover video { max-width: 420px; max-height: 460px; width: auto; height: auto; object-fit: contain; display: block; }
+    .ia-cover-hover img, .ia-cover-hover video { max-width: min(420px, 34vw); max-height: min(460px, 42vh); width: auto; height: auto; object-fit: contain; display: block; }
     @media (max-width: 1150px) {
       .ia-grid { grid-template-columns: 1fr; row-gap: 32px; }
       .ia-bio, .ia-bio-wrap, .ia-contact { max-width: none; }
@@ -224,6 +223,9 @@
     @media (max-width: 760px) {
       :root { --slider-h: clamp(300px, 55vh, 640px); }
       .project { grid-template-columns: 1fr; margin-bottom: 32px; }
+      /* Only on mobile: the About/Index overlay stays scrollable, since
+         content can be taller than the viewport here. */
+      #ia-overlay { overflow-y: auto; }
       /* On mobile the image is centered in the slider, rather than
          flush left like on desktop. */
       .slide img, .slide video { object-position: center; }
@@ -293,9 +295,12 @@
       #indexabout-btn, #ia-close-btn { display: none; }
 
       .ia-page { padding: 24px 16px 100px; }
-      .ia-visual { min-height: 280px; margin-top: 12px; }
-      .ia-graphic { max-width: 260px; max-height: 280px; }
-      .ia-cover-hover img, .ia-cover-hover video { max-width: 260px; max-height: 280px; }
+      /* The page scrolls on mobile (see #ia-overlay above), so the visual
+         goes back into the normal flow below the About content instead of
+         staying pinned to the viewport — it just scrolls into view. */
+      .ia-visual { position: relative; left: auto; bottom: auto; width: 100%; margin-top: 24px; }
+      .ia-graphic { max-width: min(260px, 60vw); max-height: min(280px, 32vh); }
+      .ia-cover-hover img, .ia-cover-hover video { max-width: min(260px, 60vw); max-height: min(280px, 32vh); }
 
       /* Index list is dropped on mobile — keep just the looping cover
          images and the About content. */
